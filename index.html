@@ -5,6 +5,21 @@
     <link rel="icon" type="image/svg+xml" href="/RevoCalc/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RevoIdle Calc</title>
+    <script>
+      // Convert GitHub Pages 404 redirect query back into the original SPA route.
+      (function (l) {
+        if (l.search[1] === '/') {
+          const decoded = l.search
+            .slice(1)
+            .split('&')
+            .map(function (s) {
+              return s.replace(/~and~/g, '&')
+            })
+            .join('?')
+          window.history.replaceState(null, '', l.pathname.slice(0, -1) + decoded + l.hash)
+        }
+      })(window.location)
+    </script>
     <script type="module" crossorigin src="/RevoCalc/assets/index-BVF-LEGQ.js"></script>
     <link rel="stylesheet" crossorigin href="/RevoCalc/assets/index-BxY9PtyP.css">
   </head>
