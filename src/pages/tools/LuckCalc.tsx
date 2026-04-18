@@ -102,6 +102,12 @@ const LuckCalc = () => {
       inverse: (after) => BigDouble.pow(10, after).mul(1000), 
       min: 1000,
       base: 3
+    },
+    { 
+      func: () => BigDouble.fromNumber(1000), 
+      inverse: () => BigDouble.fromNumber(1000), 
+      min: 1000,
+      base: 3
     }
   ];
 
