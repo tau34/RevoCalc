@@ -4,15 +4,27 @@ import type { ToolDefinition } from "./Types";
 
 const LuckCalcTool: ToolDefinition = {
   id: "luck",
-  name: "Luck Calculator",
-  description: "calculate chances of zodiacs from your luck",
+  name: {
+    ja: "運計算機",
+    en: "Luck Calculator"
+  },
+  description: {
+    ja: "運の値から星座のレアリティの出現確率を計算します",
+    en: "Calculate chances of zodiac rarities from your luck"
+  },
   component: LuckCalc
 }
 
 const TarotUpgradeTool: ToolDefinition = {
   id: "tarot-upgrade",
-  name: "Tarot Upgrade Simulator",
-  description: "calculate tarot upgrade cost and effect",
+  name: {
+    ja: "タロットアップグレード計算機",
+    en: "Tarot Upgrade Calculator"
+  },
+  description: {
+    ja: "タロットアップグレードのコストと効果を計算します",
+    en: "Calculate tarot upgrade cost and effect"
+  },
   component: TarotUpgrade
 }
 

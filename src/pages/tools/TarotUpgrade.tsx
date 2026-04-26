@@ -1,6 +1,7 @@
 import { useState } from "react";
 import BigDoubleInput from "../../components/BigDoubleInput";
 import { BigDouble } from "../../types/BigDouble";
+import { useLocale } from "../../i18n";
 
 type SUIT = "S" | "W" | "P" | "C";
 const suits: SUIT[] = ["S", "W", "P", "C"];
@@ -22,6 +23,7 @@ const switchRight = (suit: SUIT): SUIT => {
 };
 
 const TarotUpgrade = () => {
+  const locale = useLocale();
   const [suit, setSuit] = useState<SUIT>("S");
   const [curSuit, setCurSuit] = useState<number | null>(null);
   const [upId, setUpId] = useState<number | null>(null);
@@ -48,6 +50,15 @@ const TarotUpgrade = () => {
   }
 
   const getAmountLabel = (s: number) => {
+    if (locale === "ja") {
+      switch (s) {
+        case 0: return "ソード";
+        case 1: return "ワンド";
+        case 2: return "ペンタクル";
+        case 3: return "カップ";
+      }
+    }
+
     switch (s) {
       case 0: return "Swords";
       case 1: return "Wands";
@@ -59,8 +70,8 @@ const TarotUpgrade = () => {
   function calcCost(a: number, b: number, c: number) {
     console.log(new BigDouble(1, 10).pow(0));
     return new BigDouble(1, a).mul(new BigDouble(1, b).pow(
-      level.greaterThanEqual(3) ? level.sub(1).pow(c) : 
-      level.sub(1))).toString();
+      level.greaterThanEqual(3) ? level.sub(1).pow(c) :
+        level.sub(1))).toString();
   }
 
   function update(s: number, i: number) {
@@ -182,15 +193,24 @@ const TarotUpgrade = () => {
 
     return (<div>
       {i === 2 && <BigDoubleInput
-        label={`${getAmountLabel(s)} Amount: `}
+        label={`${getAmountLabel(s)} ${locale === "ja" ? "(タロット資源) 所持数" : "(Tarot Resource) Amount"}: `}
         value={extra}
         onChange={(val) => setExtra(val)}
         isValid={(val) => val.greaterThanEqual(0)}
       />}
-      <div>Effect: {eff}</div>
-      <div>Cost: {cost}</div>
+      <div>{locale === "ja" ? "効果" : "Effect"}: {eff}</div>
+      <div>{locale === "ja" ? "コスト" : "Cost"}: {cost}</div>
     </div>);
   }
+
+  const localizedSuitNames: Record<SUIT, string> = locale === "ja"
+    ? {
+      S: "ソード",
+      W: "ワンド",
+      P: "ペンタクル",
+      C: "カップ",
+    }
+    : suitNames;
 
   const w = Math.min(383, document.documentElement.clientWidth);
   const m = w / 383;
@@ -198,7 +218,7 @@ const TarotUpgrade = () => {
 
   return (
     <div>
-      <h3 style={{ margin: "20px 0" }}>{suitNames[suit]}</h3>
+      <h3 style={{ margin: "20px 0" }}>{localizedSuitNames[suit]}</h3>
       <div style={{
         width: "100%", position: "relative", height: `${h}px`,
         overflowX: "hidden", marginBottom: "20px"
@@ -247,13 +267,13 @@ const TarotUpgrade = () => {
           }}
         >→</button>
       </div>
-      <h3>{curSuit !== null ? suitNames[suits[curSuit]] : ""}</h3>
-      <h3>{upId !== null ? `Upgrade ${upId + 1}` : ""}</h3>
+      <h3>{curSuit !== null ? localizedSuitNames[suits[curSuit]] : ""}</h3>
+      <h3>{upId !== null ? `${locale === "ja" ? "アップグレード" : "Upgrade"} ${upId + 1}` : ""}</h3>
 
       {curSuit !== null && upId !== null &&
         (<>
           <BigDoubleInput
-            label="Level: "
+            label={locale === "ja" ? "レベル: " : "Level: "}
             value={level ?? BigDouble.ONE}
             onChange={(val) => {
               setLevel(val.round());

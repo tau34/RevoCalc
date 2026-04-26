@@ -1,17 +1,20 @@
 import { TOOLS } from "../types/ToolRegistry";
 import { Link } from "react-router-dom"
+import { localize, useLocale } from "../i18n";
 
 export function Dashboard() {
+  const locale = useLocale();
+
   return (
     <div>
-      <h1>Top Page</h1>
-      <h2>Tools</h2>
+      <h1>{locale === "ja" ? "トップページ" : "Top Page"}</h1>
+      <h2>{locale === "ja" ? "ツール" : "Tools"}</h2>
       {TOOLS.map(tool => (
-        <div style={{ border: "1px solid #ccc", margin: 10 }}>
+        <div key={tool.id} style={{ border: "1px solid #ccc", margin: 10 }}>
           <Link key={tool.id} to={`/${tool.id}`}>
-            <h3>{tool.name}</h3>
+            <h3>{localize(tool.name, locale)}</h3>
           </Link>
-          <p>{tool.description}</p>
+          <p>{localize(tool.description, locale)}</p>
         </div>
       ))}
     </div>

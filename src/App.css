@@ -254,9 +254,87 @@ h3.title {
   position: absolute;
   padding: 15px 0;
   left: 80px;
-  right: 0;
+  right: 72px;
   border-bottom: 1px solid #ccc;
   text-align: left;
+}
+
+.locale-menu {
+  position: absolute;
+  top: 6px;
+  right: 12px;
+  z-index: 32;
+}
+
+.locale-trigger {
+  width: 56px;
+  height: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #bbb;
+  border-radius: 999px;
+  background: #fff;
+  color: #222;
+  cursor: pointer;
+  padding: 0;
+}
+
+.locale-trigger svg {
+  width: 36px;
+  height: 36px;
+}
+
+.locale-trigger:hover {
+  background: #f3f4f6;
+}
+
+.locale-trigger:focus-visible {
+  outline: 2px solid #222;
+  outline-offset: 2px;
+}
+
+.locale-options {
+  position: absolute;
+  top: 34px;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 112px;
+  background: #fff;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
+  overflow: hidden;
+}
+
+.locale-options button {
+  border: none;
+  background: #fff;
+  text-align: left;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 18px;
+}
+
+.locale-options button:hover {
+  background: #f3f4f6;
+}
+
+.locale-options button.active {
+  background: #eceff8;
+  font-weight: 600;
+}
+
+@media (max-width: 999px) {
+  h3.title {
+    right: 60px;
+  }
+
+  .locale-options {
+    min-width: 104px;
+  }
 }
 
 @media (min-width: 1000px) {
