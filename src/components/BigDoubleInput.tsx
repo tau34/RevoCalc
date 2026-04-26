@@ -5,8 +5,9 @@ const BigDoubleInput = (props: {
   label: string;
   value: BigDouble;
   onChange: (value: BigDouble) => void;
+  isValid?: (value: BigDouble) => boolean;
 }) => {
-  const { label, value, onChange } = props;
+  const { label, value, onChange, isValid } = props;
   const [displayValue, setDisplayValue] = useState(value.toString());
 
   return (
@@ -19,7 +20,7 @@ const BigDoubleInput = (props: {
           const inputValue = e.target.value;
           const val = BigDouble.fromString(inputValue);
           setDisplayValue(inputValue);
-          if (!val.isNaN()) {
+          if (!val.isNaN() && (!isValid || isValid(val))) {
             onChange(val);
             return;
           }

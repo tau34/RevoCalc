@@ -266,6 +266,7 @@ const LuckCalc = () => {
         onChange={(val) => {
           setLuck(val);
         }}
+        isValid={(val) => val.greaterThanEqual(BigDouble.ZERO)}
       />
 
       {ach.map(([num, state, setState]) => (

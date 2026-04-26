@@ -16,9 +16,25 @@ export class BigDouble {
       this.exponent = 0;
       return;
     }
+    if (this.mantissa === Infinity) {
+      this.mantissa = Infinity;
+      this.exponent = 0;
+      return;
+    }
+    if (this.mantissa === -Infinity) {
+      this.mantissa = -Infinity;
+      this.exponent = 0;
+      return;
+    }
     if (this.mantissa === 0) {
       this.exponent = 0;
       return;
+    }
+    if (!BigDouble.isIntNumber(this.exponent)) {
+      const f = Math.floor(this.exponent);
+      const d = this.exponent - f;
+      this.mantissa *= Math.pow(10, d);
+      this.exponent = f;
     }
     const M = Math.abs(this.mantissa);
     if (M >= 10) {
@@ -40,6 +56,15 @@ export class BigDouble {
   static fromNumber(value: number): BigDouble {
     if (value === 0) {
       return new BigDouble(0, 0);
+    }
+    if (isNaN(value)) {
+      return new BigDouble(NaN, 0);
+    }
+    if (value === Infinity) {
+      return new BigDouble(Infinity, 0);
+    }
+    if (value === -Infinity) {
+      return new BigDouble(-Infinity, 0);
     }
     const mantissa = value;
     const exponent = 0;
@@ -89,32 +114,42 @@ export class BigDouble {
     if (this.equals(BigDouble.ZERO)) {
       return '0';
     }
-    if (this.lessThan(BigDouble.ONE)) {
+    if (this.mantissa === Infinity || this.exponent === Infinity) {
+      return "eInfinity";
+    }
+    if (this.lessThan(0.0001)) {
       const exp = Math.floor(this.log10AsNumber());
       const mag = Math.pow(10, exp);
       const scaled = this.toNumber() / mag;
-      return `${scaled.toFixed(5)}e${exp}`;
+      return `${scaled.toFixed(4)}e${exp}`;
+    }
+    if (this.lessThan(BigDouble.ONE)) {
+      let exp = Math.floor(Math.log10(this.toNumber()));
+      return this.toNumber().toFixed(4 - exp);
     }
     if (this.lessThan(E5)) {
       const exp = Math.floor(this.log10AsNumber());
-      const mag = Math.pow(10, exp - 4);
+      const mag = Math.pow(10, exp);
       const scaled = this.toNumber() / mag;
-      return Math.round(scaled) * mag + '';
+      const res = Number.parseFloat(scaled.toFixed(4)) * mag;
+      return res.toFixed(4);
     }
     if (this.lessThan(E9)) {
       return Math.round(this.toNumber()) + '';
     }
     this.normalize();
     if (this.lessThan(E1E5)) {
-      return this.mantissa.toFixed(5) + 'e' + this.exponent;
+      return this.mantissa.toFixed(4) + 'e' + 
+        Math.round(this.exponent);
     }
     if (this.lessThan(E1E9)) {
       return 'e' + Math.round(this.exponent);
     }
     const ee = Math.floor(Math.log10(this.exponent));
-    const mag = Math.pow(10, ee - 4);
+    const mag = Math.pow(10, ee);
     const scaled = this.exponent / mag;
-    return `e${Math.round(scaled) / 10000}e${ee}`;
+    const res = Number.parseFloat(scaled.toFixed(4)) * mag;
+    return `e${res.toFixed(4)}e${ee}`;
   }
 
   toSimpleString(): string {
@@ -129,6 +164,9 @@ export class BigDouble {
     this.normalize();
     other = typeof other === "number" ? BigDouble.fromNumber(other) : other;
     other.normalize();
+    if (this.mantissa === 0) {
+      return other.mantissa < 0;
+    }
     if (this.exponent > other.exponent) {
       return this.mantissa > 0;
     } else if (this.exponent < other.exponent) {
@@ -142,6 +180,9 @@ export class BigDouble {
     this.normalize();
     other = typeof other === "number" ? BigDouble.fromNumber(other) : other;
     other.normalize();
+    if (this.mantissa === 0) {
+      return other.mantissa <= 0;
+    }
     if (this.exponent > other.exponent) {
       return this.mantissa >= 0;
     } else if (this.exponent < other.exponent) {
@@ -203,6 +244,9 @@ export class BigDouble {
     other = typeof other === "number" ? BigDouble.fromNumber(other) : other;
     const mantissa = this.mantissa * other.mantissa;
     const exponent = this.exponent + other.exponent;
+    if (exponent === Infinity) {
+      return new BigDouble(Infinity, 0);
+    }
     return BigDouble.normalize(new BigDouble(mantissa, exponent));
   }
 
@@ -232,12 +276,18 @@ export class BigDouble {
   pow(exponent: number | BigDouble): BigDouble {
     this.normalize();
     if (exponent instanceof BigDouble) {
+      if (exponent.greaterThanEqual(Number.MAX_VALUE)) {
+        return new BigDouble(Infinity, 0);
+      }
       return this.pow(exponent.toNumber());
     } else {
       const mExp = Math.log10(this.mantissa) * exponent;
       const exp = this.exponent * exponent;
       const expAdd = Math.floor(mExp);
       const mantissa = Math.pow(10, mExp - expAdd);
+      if (exp + expAdd === Infinity) {
+        return new BigDouble(Infinity, 0);
+      }
       return BigDouble.normalize(new BigDouble(mantissa, exp + expAdd));
     }
   }
@@ -288,6 +338,15 @@ export class BigDouble {
     return value.ln();
   }
 
+  sqrt(): BigDouble {
+    this.normalize();
+    return this.pow(0.5);
+  }
+
+  static sqrt(value: BigDouble): BigDouble {
+    return value.sqrt();
+  }
+
   round(): BigDouble {
     this.normalize();
     if (this.greaterThan(Number.MAX_VALUE)) {
@@ -302,5 +361,23 @@ export class BigDouble {
       return this;
     }
     return BigDouble.fromNumber(Math.floor(this.toNumber()));
+  }
+
+  abs(): BigDouble {
+    return new BigDouble(Math.abs(this.mantissa), this.exponent);
+  }
+
+  static isIntNumber(value: number): boolean {
+    return Math.abs(value - Math.round(value)) < 1e-9;
+  }
+
+  isInteger(): boolean {
+    this.normalize();
+    if (this.greaterThan(Number.MAX_VALUE) || this.lessThan(-Number.MAX_VALUE)) {
+      return true;
+    } else {
+      const num = this.toNumber();
+      return BigDouble.isIntNumber(num);
+    }
   }
 }
