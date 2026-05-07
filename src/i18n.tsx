@@ -58,6 +58,10 @@ export function useSetLocale(): (locale: Locale) => void {
   return useContext(LocaleSetterContext);
 }
 
-export function localize(text: LocalizedText, locale: Locale): string {
-  return text[locale];
+export function localize(text: LocalizedText, locale: Locale, params?: Record<string, string>): string {
+  let result = text[locale];
+  if (params) {
+    result = result.replace(/\{(\w+)\}/g, (_, key) => String(params[key] ?? ""));
+  }
+  return result;
 }
