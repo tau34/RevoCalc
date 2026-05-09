@@ -181,7 +181,7 @@ const LuckCalc = () => {
         .map((s, i) => ({
           label: s,
           value: "0%",
-          textColor: COLORS[i + 9]
+          textColor: COLORS[i + 10]
         }))
       ];
     }

@@ -1,3 +1,4 @@
+import Artifact from "../pages/tools/Artifact";
 import LuckCalc from "../pages/tools/LuckCalc";
 import TarotUpgrade from "../pages/tools/TarotUpgrade";
 import type { ToolDefinition } from "./Types";
@@ -28,7 +29,21 @@ const TarotUpgradeTool: ToolDefinition = {
   component: TarotUpgrade
 }
 
+const ArtifactTool: ToolDefinition = {
+  id: "artifact",
+  name: {
+    ja: "アーティファクト計算機",
+    en: "Artifact Calculator"
+  },
+  description: {
+    ja: "アーティファクトのコストと効果を計算します",
+    en: "Calculate artifact costs and effects"
+  },
+  component: Artifact
+}
+
 export const TOOLS : ToolDefinition[] = [
   LuckCalcTool,
-  TarotUpgradeTool
+  TarotUpgradeTool,
+  ArtifactTool
 ]

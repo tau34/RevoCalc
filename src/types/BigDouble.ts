@@ -148,7 +148,7 @@ export class BigDouble {
     const ee = Math.floor(Math.log10(this.exponent));
     const mag = Math.pow(10, ee);
     const scaled = this.exponent / mag;
-    const res = Number.parseFloat(scaled.toFixed(4)) * mag;
+    const res = Number.parseFloat(scaled.toFixed(4));
     return `e${res.toFixed(4)}e${ee}`;
   }
 
