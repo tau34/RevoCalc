@@ -1,4 +1,5 @@
 import Artifact from "../pages/tools/Artifact";
+import GoldenResource from "../pages/tools/GoldenResource";
 import LuckCalc from "../pages/tools/LuckCalc";
 import TarotUpgrade from "../pages/tools/TarotUpgrade";
 import type { ToolDefinition } from "./Types";
@@ -42,8 +43,22 @@ const ArtifactTool: ToolDefinition = {
   component: Artifact
 }
 
+const GoldenResourceTool: ToolDefinition = {
+  id: "golden-resource",
+  name: {
+    ja: "金資源計算機",
+    en: "Golden Resource Calculator"
+  },
+  description: {
+    ja: "タロット資源から金資源の獲得量を計算します",
+    en: "Calculate golden resource gain from tarot resource"
+  },
+  component: GoldenResource
+}
+
 export const TOOLS : ToolDefinition[] = [
   LuckCalcTool,
   TarotUpgradeTool,
-  ArtifactTool
+  ArtifactTool,
+  GoldenResourceTool
 ]

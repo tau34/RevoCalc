@@ -65,8 +65,8 @@ const DESC : LocalizedText[] = [
     en: "Multiplies Sacrifice Dust gain by x{value}"
   },
   {
-    ja: "遺物{no}の効果：x{value}",
-    en: "Relic {no} effect: x{value}"
+    ja: "遺物{no}の効果：{op}{value}",
+    en: "Relic {no} effect: {op}{value}"
   },
   {
     ja: "研磨槍の効果：^{value}",
@@ -261,17 +261,17 @@ const Artifact = () => {
         break;
       case 1:
         value = level.mul(0.01).add(1).toString();
-        d = localize(DESC[1], locale, { value, no: `${type + 24}` });
+        d = localize(DESC[1], locale, { value, no: `${type + 24}`, op: "x" });
         break;
       case 2:
         switch (type) {
           case 0:
             value = level.mul(0.01).add(1).toString();
-            d = localize(DESC[1], locale, { value, no: "56" });
+            d = localize(DESC[1], locale, { value, no: "56", op: "x" });
             break;
           case 1:
             value = level.mul(1000).add(1).toString();
-            d = localize(DESC[1], locale, { value, no: "8" });
+            d = localize(DESC[1], locale, { value, no: "8", op: "^" });
             break;
           case 2:
             value = level.mul(0.02).add(1).toString();
@@ -286,12 +286,12 @@ const Artifact = () => {
       case 3:
         switch (type) {
           case 0:
-            value = level.mul(0.25).add(1).toString();
-            d = localize(DESC[1], locale, { value, no: "13" });
+            value = level.mul(0.2).add(1).toString();
+            d = localize(DESC[1], locale, { value, no: "13", op: "x" });
             break;
           case 1:
             value = level.mul(0.1).add(1).toString();
-            d = localize(DESC[1], locale, { value, no: "14" });
+            d = localize(DESC[1], locale, { value, no: "14", op: "x" });
             break;
           case 2:
             value = level.mul(0.01).add(1).toString();
@@ -300,19 +300,19 @@ const Artifact = () => {
           case 3:
             value = BigDouble.fromNumber(100).pow(level.greaterThan(2) ? level.div(2).pow(0.5).mul(2) : level)
               .div(100).pow(0.04).mul(100).toString();
-            d = localize(DESC[1], locale, { value, no: "2" });
+            d = localize(DESC[1], locale, { value, no: "2", op: "^" });
             break;
         }
         break;
       case 4:
         value = level.mul(0.25).add(1).toString();
-        d = localize(DESC[1], locale, { value, no: "2" });
+        d = localize(DESC[1], locale, { value, no: "2", op: "^" });
         break;
       case 5:
         switch (type) {
           case 0:
             value = level.mul(0.01).add(1).toString();
-            d = localize(DESC[1], locale, { value, no: "21" });
+            d = localize(DESC[1], locale, { value, no: "21", op: "x" });
             break;
           case 1:
             value = level.mul(0.01).add(1).toString();
@@ -329,14 +329,14 @@ const Artifact = () => {
         }
         break;
       case 6:
-        value = level.mul(0.09).add(1).toString();
+        value = level.mul(0.01).add(0.08).toString();
         d = localize(DESC[7], locale, { value, suit: localize(RESOURCES[type], locale) });
         break;
       case 7:
         switch (type) {
           case 1:
             value = level.mul(0.02).add(1).toString();
-            d = localize(DESC[1], locale, { value, no: "52" });
+            d = localize(DESC[1], locale, { value, no: "52", op: "x" });
             break;
           case 2:
             value = level.mul(4).add(1).toString();
@@ -356,7 +356,7 @@ const Artifact = () => {
             break;
           case 3:
             value = level.mul(0.02).add(1).toString();
-            d = localize(DESC[1], locale, { value, no: "32" });
+            d = localize(DESC[1], locale, { value, no: "32", op: "^" });
             break;
         }
         break;
