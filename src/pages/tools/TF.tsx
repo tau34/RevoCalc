@@ -102,14 +102,14 @@ const TF = () => {
     } else {
       r = r.add(360);
     }
-    return r.mul(boost.mul(0.01).add(1)).mul(secrets.mul(0.001).add(1));
+    return r.mul(boost.mul(0.01).add(1).add(secrets.mul(0.001)));
   }
 
   const calcOFGain = () => {
     let r = tfGainLv.add(1).div(tfGainLv.add(10)).mul(3600);
     if (ofEnabled) {
       let t = r.greaterThan(1800) ? BigDouble.fromNumber(1800) : r;
-      return t.mul(ratio.mul(0.1).div(6).add(600));
+      return t.mul(ratio.mul(0.1).div(6)).add(600);
     } else {
       return BigDouble.ZERO;
     }

@@ -175,22 +175,55 @@ export class BigDouble {
     }
     const pf = (x: number) => x < 10 ? '0' + x.toFixed(2) : x.toFixed(2);
     if (this.lessThan(3600)) {
-      const m = Math.floor(this.toNumber() / 60);
-      const s = this.toNumber() % 60;
+      let m = Math.floor(this.toNumber() / 60);
+      let s = this.toNumber() % 60;
+      if (s > 59.995) {
+        m ++;
+        s = 0;
+      }
+      if (m >= 60) {
+        return "1:00:00";
+      }
       return `${m}:${pf(s)}`;
     }
     const p = (x: number) => x.toString().padStart(2, "0");
     if (this.lessThan(86400)) {
-      const h = Math.floor(this.toNumber() / 3600);
-      const m = Math.floor((this.toNumber() % 3600) / 60);
-      const s = this.toNumber() % 60;
+      let h = Math.floor(this.toNumber() / 3600);
+      let m = Math.floor((this.toNumber() % 3600) / 60);
+      let s = this.toNumber() % 60;
+      if (s > 59.995) {
+        m ++;
+        s = 0;
+      }
+      if (m >= 60) {
+        h ++;
+        m -= 60;
+      }
+      if (h >= 24) {
+        return "1d 00:00:00";
+      }
       return `${h}:${p(m)}:${pf(s)}`;
     }
     if (this.lessThan(365 * 86400)) {
-      const d = Math.floor(this.toNumber() / 86400);
-      const h = Math.floor((this.toNumber() % 86400) / 3600);
-      const m = Math.floor((this.toNumber() % 3600) / 60);
-      const s = this.toNumber() % 60;
+      let d = Math.floor(this.toNumber() / 86400);
+      let h = Math.floor((this.toNumber() % 86400) / 3600);
+      let m = Math.floor((this.toNumber() % 3600) / 60);
+      let s = this.toNumber() % 60;
+      if (s > 59.5) {
+        m ++;
+        s = 0;
+      }
+      if (m >= 60) {
+        h ++;
+        m -= 60;
+      }
+      if (h >= 24) {
+        d ++;
+        h -= 24;
+      }
+      if (d >= 365) {
+        return "1y 0.00d";
+      }
       return `${d}d ${p(h)}:${p(m)}:${s.toFixed(0).padStart(2, "0")}`;
     }
     if (this.lessThan(100 * 365 * 86400)) {
