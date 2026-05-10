@@ -2,6 +2,7 @@ import Artifact from "../pages/tools/Artifact";
 import GoldenResource from "../pages/tools/GoldenResource";
 import LuckCalc from "../pages/tools/LuckCalc";
 import TarotUpgrade from "../pages/tools/TarotUpgrade";
+import TF from "../pages/tools/TF";
 import type { ToolDefinition } from "./Types";
 
 const LuckCalcTool: ToolDefinition = {
@@ -56,7 +57,21 @@ const GoldenResourceTool: ToolDefinition = {
   component: GoldenResource
 }
 
+const TFTool: ToolDefinition = {
+  id: "tf",
+  name: {
+    ja: "TF計算機",
+    en: "TF Calculator"
+  },
+  description: {
+    ja: "TF、OFの取得量や容量、アップグレードのコストを計算します",
+    en: "Calculate TF/OF gain, capacity and upgrade costs"
+  },
+  component: TF
+}
+
 export const TOOLS : ToolDefinition[] = [
+  TFTool,
   LuckCalcTool,
   TarotUpgradeTool,
   ArtifactTool,

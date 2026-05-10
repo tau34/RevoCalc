@@ -156,6 +156,64 @@ export class BigDouble {
     return this.toNumber().toString();
   }
 
+  toStringAsTime(): string {
+    if (this.lessThan(0)) {
+      return '-' + this.negate().toStringAsTime();
+    }
+    if (this.lessThan(1e-7)) {
+      return this.toString() + 's';
+    }
+    if (this.lessThan(1)) {
+      const e = Math.floor(Math.log10(this.toNumber()));
+      return (this.toNumber() * 1000).toFixed(-e) + 'ms';
+    }
+    if (this.lessThan(10)) {
+      return this.toNumber().toFixed(3) + 's';
+    }
+    if (this.lessThan(60)) {
+      return this.toNumber().toFixed(2) + 's';
+    }
+    const pf = (x: number) => x < 10 ? '0' + x.toFixed(2) : x.toFixed(2);
+    if (this.lessThan(3600)) {
+      const m = Math.floor(this.toNumber() / 60);
+      const s = this.toNumber() % 60;
+      return `${m}:${pf(s)}`;
+    }
+    const p = (x: number) => x.toString().padStart(2, "0");
+    if (this.lessThan(86400)) {
+      const h = Math.floor(this.toNumber() / 3600);
+      const m = Math.floor((this.toNumber() % 3600) / 60);
+      const s = this.toNumber() % 60;
+      return `${h}:${p(m)}:${pf(s)}`;
+    }
+    if (this.lessThan(365 * 86400)) {
+      const d = Math.floor(this.toNumber() / 86400);
+      const h = Math.floor((this.toNumber() % 86400) / 3600);
+      const m = Math.floor((this.toNumber() % 3600) / 60);
+      const s = this.toNumber() % 60;
+      return `${d}d ${p(h)}:${p(m)}:${s.toFixed(0).padStart(2, "0")}`;
+    }
+    if (this.lessThan(100 * 365 * 86400)) {
+      const y = Math.floor(this.toNumber() / (365 * 86400));
+      const d = (this.toNumber() % (365 * 86400)) / 86400;
+      return `${y}y ${d.toFixed(2)}d`;
+    }
+    if (this.lessThan(1000 * 365 * 86400)) {
+      const y = this.toNumber() / (365 * 86400);
+      return `${y.toFixed(3)}y`;
+    }
+    if (this.lessThan(10000 * 365 * 86400)) {
+      const y = this.toNumber() / (365 * 86400);
+      return `${y.toFixed(2)}y`;
+    }
+    if (this.lessThan(1e9 * 365 * 86400)) {
+      const y = this.toNumber() / (365 * 86400);
+      return `${y.toFixed(0)}y`;
+    }
+    const e = Math.floor(Math.log10(this.toNumber() / (365 * 86400)));
+    return `${(this.toNumber() / (365 * 86400 * Math.pow(10, e))).toFixed(4)}e${e}y`;
+  }
+
   isNaN(): boolean {
     return isNaN(this.mantissa);
   }
