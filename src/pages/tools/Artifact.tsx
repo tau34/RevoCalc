@@ -243,7 +243,7 @@ const Artifact = () => {
         break;
     }
 
-    let l = level.sub(1);
+    let l = level.sub(2);
     if (l.greaterThanEqual(3)) {
       l = l.pow(l.mul(0.01).add(1));
     }
