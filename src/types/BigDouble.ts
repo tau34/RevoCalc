@@ -243,8 +243,7 @@ export class BigDouble {
       const y = this.toNumber() / (365 * 86400);
       return `${y.toFixed(0)}y`;
     }
-    const e = Math.floor(Math.log10(this.toNumber() / (365 * 86400)));
-    return `${(this.toNumber() / (365 * 86400 * Math.pow(10, e))).toFixed(4)}e${e}y`;
+    return this.div(365 * 86400).toString() + 'y';
   }
 
   isNaN(): boolean {
